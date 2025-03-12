@@ -1,4 +1,6 @@
 import argparse
+import os 
+from . import data
 def main():
     """
     Main entry point for the script.
@@ -22,6 +24,7 @@ def parse_args():
 
 def init(args):
     """
-    Initialize function.
+    Initialize empty glit repository.
     """
-    print('Hello, World!')
+    data.init ()
+    print (f'Initialized empty glit repository in {os.getcwd()}/{data.GIT_DIR}')
