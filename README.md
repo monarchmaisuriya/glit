@@ -21,3 +21,9 @@ If you’re still having issues after installing with pip:
 3. Verify that your cli.py file is correctly located in the glit package directory and is properly imported.
 
 ## Usage
+
+To initialize a new glit repository:
+
+```bash
+$ glit init
+```
