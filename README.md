@@ -25,5 +25,17 @@ If you’re still having issues after installing with pip:
 To initialize a new glit repository:
 
 ```bash
-$ glit init
+$ glit init # returns the directory of the new glit repository
+```
+
+To create a new commit:
+
+```bash
+$ glit hash-object <file_name> # returns the object id of the new commit
+```
+
+To retrieve data from a commit:
+
+```bash
+$ glit get-object <object_id> # returns the data from the file addressed by the object id
 ```
