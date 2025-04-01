@@ -16,27 +16,41 @@ def init():
         raise Exception('A glit repository already exists in this directory')
 
 
-def hash_object(data):
+def hash_object (data, type_='blob'):
     """
-    Compute the object id of some data and store it in .glit/objects.
+    Compute the hash of an object and store it in the glit repository.
 
-    The object is stored verbatim in a file with the name of its object id.
+    Store the given data under the given type (default 'blob') in the glit
+    repository.  The SHA-1 object hash of the resulting object is returned.
     """
-    oid = hashlib.sha1(data).hexdigest()
-    with open(f'{GIT_DIR}/objects/{oid}', 'wb') as out:
-        out.write(data)
+    obj = type_.encode () + b'\x00' + data
+    oid = hashlib.sha1 (obj).hexdigest ()
+    with open (f'{GIT_DIR}/objects/{oid}', 'wb') as out:
+        out.write (obj)
     return oid
 
 
-def get_object(oid):    
+def get_object (oid, expected='blob'):
     """
     Retrieve the contents of an object from the glit repository.
 
     Args:
-        oid(str): The object ID of the target object.
+        oid (str): The object ID of the glit object to retrieve.
+        expected (str, optional): The expected type of the object, defaults to 'blob'.
 
     Returns:
-        bytes: The raw data read from the object file.
+        bytes: The content of the object.
+
+    Raises:
+        AssertionError: If the object's actual type does not match the expected type.
     """
-    with open(f'{GIT_DIR}/objects/{oid}', 'rb') as f:
-        return f.read()
+
+    with open (f'{GIT_DIR}/objects/{oid}', 'rb') as f:
+        obj = f.read ()
+
+    type_, _, content = obj.partition (b'\x00')
+    type_ = type_.decode ()
+
+    if expected is not None:
+        assert type_ == expected, f'Expected {expected}, got {type_}'
+    return content

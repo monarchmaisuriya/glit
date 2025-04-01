@@ -1,6 +1,7 @@
 import argparse
 import os 
 import sys
+from . import base
 from . import data
 def main():
     """
@@ -31,6 +32,9 @@ def parse_args():
     get_object_parser.set_defaults(func=get_object)
     get_object_parser.add_argument('object')
     
+    write_tree_parser = commands.add_parser('write-tree')
+    write_tree_parser.set_defaults(func=write_tree)
+    
     return parser.parse_args()
 
 def init(args):
@@ -58,4 +62,7 @@ def get_object(args):
     Given a glit object id as input, print the contents of the object to stdout.
     """
     sys.stdout.flush()
-    sys.stdout.buffer.write(data.get_object(args.object))
+    sys.stdout.buffer.write(data.get_object(args.object, expected=None))
+
+def write_tree (args):
+    print(base.write_tree())
